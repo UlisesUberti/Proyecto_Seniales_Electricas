@@ -58,12 +58,36 @@ def Audio_Grafica(nombre_archivo):
         t_audio = np.linspace(start=0,stop=nframes/framerate,num=nframes)
 
         #graficamos la señal 
+        plt.figure(figsize=(15,5))
         plt.plot(t_audio,audio,'red')
         plt.title("Señal de audio original")
         plt.grid(True)
         plt.xlabel("Tiempo [s]")
         plt.ylabel("Amplitud (bytes a enteros con signo)")
-        plt.figure(figsize=(135,20))
         plt.show()
+        return audio,t_audio
 
-
+def Audio_FFT(nombre_archivo):
+    with wave.open(nombre_archivo,"rb") as wav_file:
+        nchannels = wav_file.getnchannels() # cantidad de canales
+        sampwidth = wav_file.getsampwidth() # cantidad de bytes por muestra 
+        framerate = wav_file.getframerate() # frecuencia de muestreo de la señal
+        nframes = wav_file.getnframes() #obtiene la cantidad de muestras (mono: 1 frame -> 1 muestra)
+        duration = nframes / framerate # La cantidad de muestras entre la frecuencia de muestreo permite conocer la duracion del audio
+        audio_bytes = wav_file.readframes(nframes) #convertimos los datos en un arreglo de bytes
+    audio = np.frombuffer(audio_bytes,dtype=np.int16) #convertimos los bytes en enteros con signo
+    N = len(audio) #cantidad de elementos
+    T = 1 / framerate #intervalo de muestreo
+    FFT_Senial = np.fft.fftshift(np.fft.fft(audio)/N)
+    frecuencia = np.fft.fftshift(np.fft.fftfreq(N,d=T))
+    #Graficamos el espectro
+    plt.figure(figsize=(15,5))
+    plt.title("Espectro de la señal de audio (modulo)")
+    plt.xlabel("Frecuencia [Hz]")
+    plt.ylabel("Magnitud")
+    plt.grid(True)
+    plt.xlim(-10e3,10e3)
+    plt.xticks(np.arange(-10e3,10e3,1e3))
+    plt.plot(frecuencia,np.abs(FFT_Senial))
+    plt.show()
+    return FFT_Senial,frecuencia
