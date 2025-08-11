@@ -55,7 +55,7 @@ def Audio_Grafica(nombre_archivo):
             raise ValueError ("Cantidad de bytes excedentes")
         
         #creamos el arreglo de tiempo para el eje horizontal
-        t_audio = np.linspace(start=0,stop=nframes/framerate,num=nframes)
+        t_audio = np.arange(len(audio))/framerate
 
         #graficamos la señal 
         plt.figure(figsize=(15,5))

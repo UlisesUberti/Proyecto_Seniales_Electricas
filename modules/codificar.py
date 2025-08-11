@@ -26,11 +26,11 @@ def Codificar_Senial(nombre_archivo):
     audio = np.frombuffer(audio_bytes,dtype=np.int16)   
     # audio es un arreglo de enteros donde cada elemento representa el entero correspondiente a 16 bits
 
-    #Convertimos esos enteros en binario 
+    #Convertimos esos enteros en binario
     #np.binary_repr es una funcion de numpy que convierte un numero en una cada binaria
-    #el argumento muestra & 0xFFFF permite convertir numeros con signo 
+    #el argumento muestra & 0xFFFF permite convertir numeros con signo
     audio_bits = [np.binary_repr(int(muestra) & 0xFFFF,width=16) for muestra in audio]
-    #audio_bits es una cadena de strings donde cada string representa 16 bits 
+    #audio_bits es una cadena de strings donde cada string representa 16 bits
     
     # Convertimos la cadena de strings en un solo arreglo de bits
     # Recorremos la cadena y luego recorremos cada elemento de la cadena
